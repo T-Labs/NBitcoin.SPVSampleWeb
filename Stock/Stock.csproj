@@ -15,6 +15,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.1.0" />
     <PackageReference Include="NBitcoin" Version="4.0.0.5" />
+    <PackageReference Include="QBitNinja.Client" Version="1.0.3.39" />
     <PackageReference Include="System.ComponentModel" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
