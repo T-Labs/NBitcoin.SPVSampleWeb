@@ -24,17 +24,19 @@ namespace Stock.Controllers
 
             var network = Network.TestNet;
 
+            //mysLDbXCoie81EysydNHfSTva5sy4rRzKB
+
             var secret = new ExtKey().GetWif(network); //new BitcoinSecret("943b00f1-1488-4d44-91fa-f3bcc5789099");
             var key = secret.PrivateKey;
 
             Transaction tx = new Transaction();
             var input = new TxIn();
-            input.PrevOut = new OutPoint(new uint256("943b00f1-1488-4d44-91fa-f3bcc5789099"), 1);
+            input.PrevOut = new OutPoint(new uint256("dc7268d85689fe3a4dade2a5886794237221fb0161e59f12d8128c46ca7fab90"), 1); //Transaction ID
             input.ScriptSig = key.GetBitcoinSecret(network).GetAddress().ScriptPubKey;
             tx.AddInput(input);
 
             TxOut output = new TxOut();
-            var desctination = BitcoinAddress.Create("943b00f1-1488-4d44-91fa-f3bcc5789099");
+            var desctination = BitcoinAddress.Create("mwCwTceJvYV27KXBc3NJZys6CjsgsoeHmf");
             Money fee = Money.Satoshis(40000);
             output.Value = Money.Coins(0.1m) - fee;
             output.ScriptPubKey = desctination.ScriptPubKey;
@@ -42,7 +44,7 @@ namespace Stock.Controllers
 
             tx.Sign(secret, false);
 
-            var node = Node.Connect(network, "76.6.72.220:8333");
+            var node = Node.ConnectToLocal(network);
             node.VersionHandshake();
             node.SendMessage(new InvPayload());
             node.SendMessage(new TxPayload());
