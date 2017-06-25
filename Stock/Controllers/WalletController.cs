@@ -29,7 +29,7 @@ namespace Stock.Controllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<Wallet> CreateWallet()
+        public async Task<WalletViewModel> CreateWallet()
         {
             WalletCreationViewModel walletCreationViewModel = new WalletCreationViewModel();
             walletCreationViewModel.Name = new Random().Next(1, 100).ToString();
@@ -45,7 +45,7 @@ namespace Stock.Controllers
                 wallet.Connect();
             }
 
-            return wallet;
+            return walletVm;
         }
 
         private Task<Wallet> CreateWallet(WalletCreation creation)
