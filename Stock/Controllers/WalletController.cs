@@ -4,53 +4,58 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Stock.Models;
-using Info.Blockchain.API.BlockExplorer;
-using Info.Blockchain.API.Models;
-using Info.Blockchain.API.Wallet;
 using System.Threading;
-using Info.Blockchain.API.Client;
+using NBitcoin.SPV;
+using System.Collections.ObjectModel;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Stock.Controllers
 {
     [Route("api/[controller]")]
-    public class WalletController : Controller
+    public class WalletController : BaseController
     {
-
-        private static Wallet wallet;
-        private static WalletCreator walletCreator;
-
-        BlockchainApiHelper apiHelper;
-
-        public WalletController()
+        private readonly ObservableCollection<WalletViewModel> _Wallets = new ObservableCollection<WalletViewModel>();
+        public ObservableCollection<WalletViewModel> Wallets
         {
-            apiHelper = new BlockchainApiHelper(serviceUrl: "http://localhost:51006/");
+            get
+            {
+                return _Wallets;
+            }
         }
+        
 
         // GET: api/wallet/GetBalance
         [HttpGet]
         [Route("balance")]
-        public async Task<object> GetBalance(string walletAddress = "943b00f1-1488-4d44-91fa-f3bcc5789099")
+        public object GetBalance(string walletAddress = "943b00f1-1488-4d44-91fa-f3bcc5789099")
         {
-            // create a new wallet
-            walletCreator = apiHelper.CreateWalletCreator();
-
-            BlockExplorer explorer = new BlockExplorer();
-            var outs = await explorer.GetUnspentOutputsAsync(new List<string> { walletAddress });
-
-            Thread.Sleep(5000);
-            return outs;
+            return null;
         }
         // return new ObjectResult(outs);
 
         [HttpPost]
         [Route("create")]
-        public Wallet Create()
+        public async Task<Wallet> CreateWallet()
         {
-            wallet = apiHelper.InitializeWallet("wallet-identifier", "someComplicated123Password");
-           // WalletAddress newAddr = await wallet.NewAddressAsync("test label 123").Result;
+            WalletCreationViewModel walletCreationViewModel = new WalletCreationViewModel();
+            walletCreationViewModel.Name = new Random().Next(1, 100).ToString();
+            WalletCreation creation = walletCreationViewModel.CreateWalletCreation();
+            Wallet wallet = await CreateWallet(creation);
+            var walletVm = new WalletViewModel(wallet, walletCreationViewModel);
+            walletVm.Save();
+            if (_ConnectionParameters != null)
+            {
+                wallet.Configure(_ConnectionParameters);
+                wallet.Connect();
+            }
+
             return wallet;
+        }
+
+        private Task<Wallet> CreateWallet(WalletCreation creation)
+        {
+            return Task.Factory.StartNew(() => new Wallet(creation));
         }
 
     }

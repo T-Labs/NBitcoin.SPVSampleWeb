@@ -42,7 +42,7 @@ namespace Stock.Models
         {
             get
             {
-                return Path.Combine(Environment.GetEnvironmentVariable("path"), Name);
+                return Path.Combine(AppContext.BaseDirectory, Name);
             }
         }
 
