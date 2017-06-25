@@ -10,6 +10,9 @@ namespace Stock.Models.Transactions
     public class TransactionTemporaryViewModel
     {
         public string Hex { get; set; } = "e44587cf08b4f03b0e8b4ae7562217796ec47b8c91666681d71329b764add2e3";
+        public string DestinationAddress { get; set; }
+        public string SourceAddress { get; set; }
+        public string PrevTransactionId { get; set; }
         public double Quantity { get; set; } = 0.01;
         public double Fee { get; set; } = 0.001;
         public double Balance { get; set; } = 1;
