@@ -7,6 +7,8 @@ using Stock.Models;
 using System.Threading;
 using NBitcoin.SPV;
 using System.Collections.ObjectModel;
+using QBitNinja.Client;
+using NBitcoin;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,24 +17,15 @@ namespace Stock.Controllers
     [Route("api/[controller]")]
     public class WalletController : BaseController
     {
-        private readonly ObservableCollection<WalletViewModel> _Wallets = new ObservableCollection<WalletViewModel>();
-        public ObservableCollection<WalletViewModel> Wallets
-        {
-            get
-            {
-                return _Wallets;
-            }
-        }
-        
-
         // GET: api/wallet/GetBalance
         [HttpGet]
         [Route("balance")]
-        public object GetBalance(string walletAddress = "943b00f1-1488-4d44-91fa-f3bcc5789099")
+        public object GetBalance(WalletViewModel walletVm)
         {
-            return null;
+            QBitNinjaClient client = new QBitNinjaClient(Network.Main);
+
+            return client.GetBalance(walletVm.CurrentAddress, true).Result;
         }
-        // return new ObjectResult(outs);
 
         [HttpPost]
         [Route("create")]
@@ -43,6 +36,8 @@ namespace Stock.Controllers
             WalletCreation creation = walletCreationViewModel.CreateWalletCreation();
             Wallet wallet = await CreateWallet(creation);
             var walletVm = new WalletViewModel(wallet, walletCreationViewModel);
+
+            //ToDo Create Wallet repository
             walletVm.Save();
             if (_ConnectionParameters != null)
             {
