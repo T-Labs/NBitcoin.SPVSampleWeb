@@ -21,11 +21,11 @@ namespace Stock.Controllers
             return View(vm);
         }
 
-        public IActionResult About()
+        public IActionResult About(string transactonHex = "dc7268d85689fe3a4dade2a5886794237221fb0161e59f12d8128c46ca7fab90")
         {
             ViewData["Message"] = "Your application description page.";
 
-            var network = Network.Main;
+            var network = Network.TestNet;
 
             //mysLDbXCoie81EysydNHfSTva5sy4rRzKB
 
@@ -37,9 +37,9 @@ namespace Stock.Controllers
             var input = new TxIn();
 
             var transactionId = uint256.Parse("dc7268d85689fe3a4dade2a5886794237221fb0161e59f12d8128c46ca7fab90");
-            var transactionResponse = client.GetTransaction(transactionId).Result;
+          //  var transactionResponse = client.GetTransaction(transactionId).Result;
 
-            input.PrevOut = new OutPoint(new uint256("dc7268d85689fe3a4dade2a5886794237221fb0161e59f12d8128c46ca7fab90"), 1); //Transaction ID
+            input.PrevOut = new OutPoint(new uint256(transactonHex), 1); //Transaction ID
             input.ScriptSig = key.GetBitcoinSecret(network).GetAddress().ScriptPubKey;
             tx.AddInput(input);
 
@@ -61,7 +61,7 @@ namespace Stock.Controllers
         {
             ViewData["Message"] = "Your contact page.";
 
-            var network = Network.Main;
+            var network = Network.TestNet;
 
             // generate private key
 
