@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using QBitNinja.Client;
 using NBitcoin;
 using Microsoft.Extensions.Options;
+using Stock.Models.Wallets;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -44,8 +45,13 @@ namespace Stock.Controllers
             Wallet wallet = await CreateWallet(creation);
             var walletVm = new WalletViewModel(wallet, walletCreationViewModel);
 
+            
+            //walletVm.Name;
+            //walletVm.Wallet.Created;
+            //walletVm.PrivateKeys;
+
             //ToDo Create Wallet repository
-            walletVm.Save();
+            WalletFileInfoViewModel walletFileInfoVm = walletVm.Save();
             if (_ConnectionParameters != null)
             {
                 wallet.Configure(_ConnectionParameters);
