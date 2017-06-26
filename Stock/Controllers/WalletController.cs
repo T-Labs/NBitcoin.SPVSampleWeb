@@ -15,7 +15,7 @@ using Microsoft.Extensions.Options;
 
 namespace Stock.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/wallet")]
     public class WalletController : BaseController
     {
 
@@ -36,7 +36,6 @@ namespace Stock.Controllers
         }
 
         [HttpPost]
-        [Route("create")]
         public async Task<WalletViewModel> CreateWallet()
         {
             WalletCreationViewModel walletCreationViewModel = new WalletCreationViewModel();

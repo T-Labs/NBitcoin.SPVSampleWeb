@@ -13,7 +13,7 @@ using Microsoft.Extensions.Options;
 
 namespace Stock.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/transaction")]
     public class TransactionController : BaseController
     {
 
@@ -25,7 +25,6 @@ namespace Stock.Controllers
         }
 
         [HttpPost]
-        [Route("create")]
         public void create(TransactionTemporaryViewModel transactionVM)
         {
             var secret = new ExtKey().GetWif(_network);
