@@ -9,6 +9,7 @@ using NBitcoin.SPV;
 using System.Collections.ObjectModel;
 using QBitNinja.Client;
 using NBitcoin;
+using Microsoft.Extensions.Options;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,6 +18,13 @@ namespace Stock.Controllers
     [Route("api/[controller]")]
     public class WalletController : BaseController
     {
+
+        private readonly Network _network;
+
+        public WalletController(IOptions<AppSettings> appSettings)
+        {
+            _network = appSettings.Value.Network;
+        }
         // GET: api/wallet/GetBalance
         [HttpGet]
         [Route("balance")]

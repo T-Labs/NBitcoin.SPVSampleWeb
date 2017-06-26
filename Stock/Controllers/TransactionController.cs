@@ -7,6 +7,7 @@ using NBitcoin;
 using QBitNinja.Client;
 using Stock.Models.Transactions;
 using QBitNinja.Client.Models;
+using Microsoft.Extensions.Options;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,15 +16,21 @@ namespace Stock.Controllers
     [Route("api/[controller]")]
     public class TransactionController : BaseController
     {
+
+        private readonly Network _network;
+
+        public TransactionController(IOptions<AppSettings> appSettings)
+        {
+            _network = appSettings.Value.Network;
+        }
+
         [HttpPost]
         [Route("create")]
         public void create(TransactionTemporaryViewModel transactionVM)
         {
-            var network = Network.TestNet;
-
-            var secret = new ExtKey().GetWif(network);
+            var secret = new ExtKey().GetWif(_network);
             var source = BitcoinAddress.Create(transactionVM.SourceAddress);
-            var client = new QBitNinjaClient(network);
+            var client = new QBitNinjaClient(_network);
 
             Transaction tx = new Transaction();
             var input = new TxIn();
