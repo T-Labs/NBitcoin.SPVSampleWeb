@@ -1,8 +1,10 @@
 ﻿using NBitcoin;
 using NBitcoin.SPV;
+using Stock.Models.Wallets;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,6 +15,8 @@ namespace Stock.Models
 {
     public class WalletViewModel : INotifyPropertyChanged
     {
+        [Key]
+        public int Id { get; set; }
         private Wallet _Wallet;
         public Wallet Wallet
         {
@@ -64,7 +68,7 @@ namespace Stock.Models
             }
         }
 
-        internal void Save()
+        internal WalletFileInfoViewModel Save()
         {
             if (!Directory.Exists(WalletDir))
                 Directory.CreateDirectory(WalletDir);
@@ -73,6 +77,7 @@ namespace Stock.Models
                 Wallet.Save(fs);
             }
             File.WriteAllText(PrivateKeyFile(), string.Join(",", PrivateKeys.AsEnumerable()));
+            return new WalletFileInfoViewModel { WalletFile = WalletFile(), PrivateKeyFile = PrivateKeyFile() };
         }
 
         private string WalletFile()
@@ -160,6 +165,8 @@ namespace Stock.Models
 
     public class TransactionViewModel
     {
+        [Key]
+        public int Id { get; set; }
         WalletTransaction _Transaction;
         public TransactionViewModel(WalletTransaction transaction)
         {
